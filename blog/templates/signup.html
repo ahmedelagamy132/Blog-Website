@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<div class="container sign-in-box">
+    <form>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" name="email" placeholder="example@example.com">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Username</label>
+                <input type="text" class="form-control" id="inputPassword4" name="username" placeholder="Agamy">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputAddress">Password</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="*******" name="pass1">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputAddress2">Re-Enter Password</label>
+                <input type="text" class="form-control" id="inputAddress2" placeholder="*******" name="pass2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCity">Age</label>
+                <input type="number" class="form-control" id="inputCity">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputState">Gender</label>
+                <select id="inputState" class="form-control">
+                    <option selected>Gender...</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                    I accept All the terms.
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign-Up</button>
+    </form>
+</div>
+
+
+{% endblock %}
