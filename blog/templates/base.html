@@ -39,18 +39,52 @@ h3{
                 <li class="nav-item active">
                     <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
                 </li>
+                {% if not current_user.is_authenticated: %}
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/sign-up">Sign Up</a>
                 </li>
+                {% else: %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/create-post">Create Post</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sign-out">Log-Out</a>
+                </li>
+                {% endif %}
+
             </ul>
+            
             <!-- <span class="navbar-text">
                 Navbar text with an inline element
             </span> -->
         </div>
     </nav>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == "error"%}
+    <div class="alert alert-danger" role="alert">
+        {{message}}
+      </div>
+      {% endif %}
+      {% if category == "info"%}
+      <div class="alert alert-info" role="alert">
+          {{message}}
+        </div>
+        {% endif %}
+        {% if category == "success"%}
+        <div class="alert alert-success" role="alert">
+            {{message}}
+          </div>
+          {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     {% block content %}
 
     {% endblock %}

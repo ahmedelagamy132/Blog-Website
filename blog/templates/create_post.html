@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Create post{% endblock %}
+{% block content %}
+<div class="mt-5 "></div>
+<div class="container mt-5 sign-in-box">
+    <form method="post">
+        <div class="form-group">
+            <h2 align="center" class="">Create Post</h2>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Post Title" name="title">
+            </div>
+        </div>
+        <textarea class="form-control" rows="6" name="post"></textarea>
+
+        <div class="form-group form-row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Submit Post</button>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <a href="/home" class="btn btn-secondary btn-lg btn-block mt-3">Back to Home</a>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </form>
+</div>
+{% endblock %}

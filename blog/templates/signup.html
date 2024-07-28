@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}Signup{% endblock %}
 {% block content %}
 
 <div class="container sign-in-box">
-    <form>
+    <form method="POST">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputEmail4">Email</label>
@@ -17,21 +17,21 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputAddress">Password</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="*******" name="pass1">
+                <input type="password" class="form-control" id="inputAddress" placeholder="*******" name="pass1">
             </div>
             <div class="form-group col-md-6">
                 <label for="inputAddress2">Re-Enter Password</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="*******" name="pass2">
+                <input type="password" class="form-control" id="inputAddress2" placeholder="*******" name="pass2">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputCity">Age</label>
-                <input type="number" class="form-control" id="inputCity">
+                <input type="number" class="form-control" id="inputCity" name="age">
             </div>
             <div class="form-group col-md-6">
                 <label for="inputState">Gender</label>
-                <select id="inputState" class="form-control">
+                <select id="inputState" class="form-control" name = "gender">
                     <option selected>Gender...</option>
                     <option>Male</option>
                     <option>Female</option>
@@ -41,7 +41,7 @@
         </div>
         <div class="form-group">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="gridCheck">
+                <input class="form-check-input" type="checkbox" id="gridCheck" name = "check">
                 <label class="form-check-label" for="gridCheck">
                     I accept All the terms.
                 </label>
