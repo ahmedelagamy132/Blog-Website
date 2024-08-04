@@ -5,8 +5,45 @@
 {% for post in posts%}
 {{post.content}}
 {% endfor %} -->
-<div class="container">
+<style>
+.small-img {
+    width: 200px;
+    /* Adjust the width as needed */
+    height: 200px;
+    /* Maintain aspect ratio */
+  }
+</style>
+
+<div class="container-fluid">
     <h1 align="center">{{user.username}}</h1>
+    <div class="container-fluid mt-2">
+        <div class="card">
+          <div class="card-header">
+            Profile
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm">
+                <b>Username: </b> {{ user.username }} <br />
+                <b>Email: </b> {{ user.email }} <br />
+                <b>Age: </b> {{ user.age }} <br />
+                <b>Gender: </b> {{ user.gender }} <br />
+                <b>Member Since: </b> {{ user.date_added }} <br />
+              </div>
+              <div class="col-sm">
+                {% if img %}
+                <img src="{{ url_for('static', filename='photos/profile_pictures/' +img.filename) }}"
+                class="img-thumbnail rounded float-right small-img ">
+      
+                {% else %}
+                <p>No profile picture available</p>
+                {% endif %}
+
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
     <!-- {% for post in posts %} -->
     <!-- <div class="card border-dark">
     <div class="card-body">
@@ -16,8 +53,8 @@
 </div>
 <br> -->
     <!-- {% endfor %} -->
-</div>
-<div class="container mt-4">
+     <hr>
+    <h2 align="center" class="m-3">posts</h2>
     {% for post in posts %}
 
     <div class="card mb-4">
@@ -35,5 +72,6 @@
             Posted on {{post.date_created}}, by <a href="/{{post.user.username}}">{{post.user.username}}</a>
         </div>
     </div>
+
     {% endfor %}
 {% endblock %}

@@ -4,52 +4,49 @@
 
 <div class="container sign-in-box">
     <form method="POST">
+        <!-- Email and Username inputs -->
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="inputEmail4">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" name="email" placeholder="example@example.com">
+                <label for="inputEmail">Email</label>
+                <input type="email" class="form-control" id="inputEmail" name="email" placeholder="example@example.com" required>
             </div>
             <div class="form-group col-md-6">
-                <label for="inputPassword4">Username</label>
-                <input type="text" class="form-control" id="inputPassword4" name="username" placeholder="Agamy">
+                <label for="inputUsername">Username</label>
+                <input type="text" class="form-control" id="inputUsername" name="username" placeholder="Agamy" required>
             </div>
         </div>
+
+        <!-- Password and Re-Enter Password -->
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="inputAddress">Password</label>
-                <input type="password" class="form-control" id="inputAddress" placeholder="*******" name="pass1">
+                <label for="inputPassword">Password</label>
+                <input type="password" class="form-control" id="inputPassword" name="pass1" placeholder="*******" required>
             </div>
             <div class="form-group col-md-6">
-                <label for="inputAddress2">Re-Enter Password</label>
-                <input type="password" class="form-control" id="inputAddress2" placeholder="*******" name="pass2">
+                <label for="inputPasswordConfirm">Re-Enter Password</label>
+                <input type="password" class="form-control" id="inputPasswordConfirm" name="pass2" placeholder="*******" required>
             </div>
         </div>
+
+        <!-- Age and Gender inputs -->
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="inputCity">Age</label>
-                <input type="number" class="form-control" id="inputCity" name="age">
+                <label for="inputAge">Age</label>
+                <input type="number" class="form-control" id="inputAge" name="age" min="0" required>
             </div>
             <div class="form-group col-md-6">
-                <label for="inputState">Gender</label>
-                <select id="inputState" class="form-control" name = "gender">
-                    <option selected>Gender...</option>
-                    <option>Male</option>
-                    <option>Female</option>
+                <label for="inputGender">Gender</label>
+                <select id="inputGender" class="form-control" name="gender" required>
+                    <option value="" disabled selected>Gender...</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
                 </select>
             </div>
+        </div>
 
-        </div>
-        <div class="form-group">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="gridCheck" name = "check">
-                <label class="form-check-label" for="gridCheck">
-                    I accept All the terms.
-                </label>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Sign-Up</button>
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>
 </div>
-
 
 {% endblock %}

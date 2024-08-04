@@ -1,117 +1,98 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
-from . import db
-from .models import User, Post
-from flask_login import login_user, logout_user, login_required, current_user  # current user holds info about the current user
-from werkzeug.security import generate_password_hash, check_password_hash
+"""
+This file defines the routes for general application actions in the Flask application using the 'routes' Blueprint.
+It includes endpoints for the home page, statistics, and visualizations of user data.
+"""
 
-# routes is the name of blueprint
+from flask import Blueprint, render_template, redirect, url_for, request, flash, current_app, jsonify
+from . import db
+from .models import User, Post, Comment, Img, Like
+from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+from sqlalchemy.sql import func
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+import os
+
+# Define the 'routes' Blueprint for general routes
 routes = Blueprint("routes", __name__)
 
 @routes.route("/")
 @routes.route("/home")
 def home():
+    """
+    Endpoint for the home page.
+    Displays posts and comments if the user is authenticated.
+    Redirects to the login page if the user is not authenticated.
+    """
     if current_user.is_authenticated:
-        posts = Post.query.all()
-        return render_template("home.html", name = current_user, posts = posts)
+        posts = Post.query.all()  # Fetch all posts
+        comments = Comment.query.all()  # Fetch all comments
+        return render_template("home.html", name=current_user, posts=posts, comments=comments)
     else:
-        flash('Please sign in first!',category='error')
-        return redirect(url_for("routes.login"))
+        flash('Please sign in first!', category='error')
+        return redirect(url_for("auth.login"))
 
-@routes.route("/profile")
-def profile():
-    return "<h1>Profile</h1>"
+@routes.route("/statistics")
+def statistics():
+    """
+    Endpoint for generating and displaying various statistical data.
+    Creates and saves plots for post counts by user, gender distribution, and most liked posts.
+    Renders the statistics page with the generated data.
+    """
+    # Query for the number of posts per user
+    mostposts = db.session.query(User.username, Post.user_id, func.count(Post.post_id).label('Post Count'))\
+                          .join(Post, User.id == Post.user_id)\
+                          .group_by(Post.user_id)\
+                          .order_by(func.count(Post.post_id).desc()).all()
+    
+    # Prepare data for post count histogram
+    usernames = [item[0] for item in mostposts]
+    counts = [item[2] for item in mostposts]
+    
+    plt.figure(figsize=(10, 6))
+    plt.hist(counts, color='blue', edgecolor='black')
+    plt.title('Post Counts by User')
+    plt.ylabel('No. of Users')
+    plt.xlabel('Post Count')
+    plt.tight_layout()
+    
+    # Save the histogram to a file
+    filepath = os.path.join(current_app.config['STATIC_FOLDER'], 'photos/statistical_photos/posts_count_distribution.png')
+    if os.path.exists(filepath):
+        os.remove(filepath)
+    plt.savefig(filepath)
+    plt.close()
 
-@routes.route("/login", methods=["GET","POST"])
-def login():
-    if request.method == "POST":
-        email = request.form["email"]
-        pass1 = request.form["pass1"]
-        user = User.query.filter_by(email=email).first()
-        print(user)
+    # Query for gender distribution
+    genders = db.session.query(User.gender, func.count(User.id).label('Gender Count'))\
+                        .group_by(User.gender).all()
+    if not genders:
+        genders = [('Unknown', 0)]  # Handle empty case if needed
 
-        if user:
-            if check_password_hash(user.password, pass1):
-                login_user(user, remember=True)
-                # print(user)
-                # print(user.age)
-                flash('logged in succesfully',category='success')
-                return redirect(url_for("routes.home"))
-            else:
-                flash('password is not correct!',category='error')
-        else:
-            flash('User does not exist',category='error')
-    return render_template("login.html")
+    counts = [item[1] for item in genders]
+    my_data = counts + [0] * (3 - len(counts))  # Pad with zeros if there are fewer than 3 items
+    my_labels = ["Males", "Females", "Other"]
+    
+    plt.figure(figsize=(8, 8))
+    plt.pie(my_data, labels=my_labels, autopct="%1.1f%%")
+    plt.title("Gender Distribution")
+    plt.tight_layout()
+    
+    # Save the pie chart to a file
+    filepath = os.path.join(current_app.config['STATIC_FOLDER'], 'photos/statistical_photos/gender_distribution.png')
+    if os.path.exists(filepath):
+        os.remove(filepath)
+    plt.savefig(filepath)
+    plt.close()
 
-@routes.route("/sign-up", methods=["GET", "POST"])
-def signup():
-    if request.method == "POST":
-        email = request.form["email"]
-        username = request.form["username"]
-        pass1 = request.form["pass1"]
-        pass2 = request.form["pass2"]
-        age = request.form["age"]
-        gender = request.form["gender"]
+    # Query for the most liked posts
+    most_liked_posts = db.session.query(Like.post_id, Post.title, User.username, func.count(Like.like_id))\
+                                .join(Post, Like.post_id == Post.post_id)\
+                                .join(User, Post.user_id == User.id)\
+                                .group_by(Like.post_id)\
+                                .order_by(func.count(Like.like_id).desc())\
+                                .limit(10).all()
 
-        email_exists = User.query.filter_by(email=email).first()
-        username_exists =  User.query.filter_by(username=username).first()
-
-        if email_exists:
-            flash('email already exists!', category='error')
-        elif username_exists:
-            flash('username already exists!', category='error')
-        elif pass1 != pass2:
-            flash('Passwords are not the same!', category='error')
-        elif len(pass1) < 5:
-            flash('Password is too short!', category='error')
-        else:
-            new_user = User(email=email, username=username, password=generate_password_hash(pass1, method='pbkdf2:sha256'), age=age, gender=gender)
-            try:
-                db.session.add(new_user)
-                db.session.commit()
-                flash('User Created', category='info')
-                login_user(new_user, remember=True)
-                return redirect(url_for("routes.home"))
-            except Exception as e:
-                return f"An error occurred: {e}"
-    return render_template("signup.html")
-
-@routes.route("/create-post", methods=["GET", "POST"])
-@login_required
-def create():
-    if request.method == "POST":
-        postTitle = request.form["title"]
-        postText = request.form["post"]
-        if not postText:
-            flash("Please write something!!", category='error')
-        elif not postTitle:
-            flash("Please provide title to the post!!", category='error')
-        else:
-            post = Post(user_id=current_user.id, title=postTitle,content=postText)
-            db.session.add(post)
-            db.session.commit()
-            flash("Done :)", category='success')
-    return render_template("create_post.html")
-
-@routes.route("/<user>")
-def user(user):
-    target_user = User.query.filter_by(username=user).first()
-    post = Post.query.filter_by(user_id=target_user.id).all() # == posts = User.posts    -> the relationship you made in the model
-    return render_template("user.html", user=target_user, posts=post)
-
-@routes.route("/delete-post/<post_id>")
-def delete(post_id):
-    target_post = Post.query.filter_by(post_id=post_id).first()
-    if not target_post:
-            flash("Post does not exist.", category='error')
-    else:
-        db.session.delete(target_post)
-        db.session.commit()
-        flash("Deleted successfully", category='success')
-    return redirect(url_for("routes.home"))
-
-
-@routes.route("/sign-out")
-@login_required # only access if you are loged in
-def signout():
-    logout_user()
-    return redirect(url_for("routes.login"))
+    return render_template("statistics.html", mostposts=mostposts, gender=genders, count=counts, most_liked_posts=most_liked_posts)

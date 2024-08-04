@@ -1,23 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Create post{% endblock %}
+{% block title %}Create Post{% endblock %}
 {% block content %}
+<!-- Adding margin-top for spacing above the container -->
 <div class="mt-5 "></div>
+
+<!-- Container for the form, with custom styling from "sign-in-box" class -->
 <div class="container mt-5 sign-in-box">
+    <!-- Form for creating a new post -->
     <form method="post">
+        <!-- Header for the form -->
         <div class="form-group">
             <h2 align="center" class="">Create Post</h2>
             <div class="col">
-                <input type="text" class="form-control" placeholder="Post Title" name="title">
+                <!-- Input field for the post title -->
+                <input type="text" class="form-control" placeholder="Post Title" name="title" required>
             </div>
         </div>
-        <textarea class="form-control" rows="6" name="post"></textarea>
+        
+        <!-- Textarea for the post content -->
+        <textarea class="form-control" rows="6" name="post" placeholder="Write your post here..." required></textarea>
 
+        <!-- Group for form buttons -->
         <div class="form-group form-row">
             <div class="col-md-1"></div>
+            <!-- Submit button for the form -->
             <div class="col-md-4">
                 <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Submit Post</button>
             </div>
             <div class="col-md-2"></div>
+            <!-- Link to navigate back to home page -->
             <div class="col-md-4">
                 <a href="/home" class="btn btn-secondary btn-lg btn-block mt-3">Back to Home</a>
             </div>
@@ -25,4 +36,5 @@
         </div>
     </form>
 </div>
+
 {% endblock %}

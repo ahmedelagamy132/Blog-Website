@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Statistics{% endblock %}
+{% block content %}
+
+<!-- Container for the user statistics table -->
+<div class="container sign-in-box mt-3">
+    <h1>Stats</h1>
+    <div style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <!-- Table headers for user stats -->
+                    <th scope="col">User ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">No. of Posts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through the mostposts variable to display user statistics -->
+                {% for username, userid, count in mostposts %}
+                <tr>
+                    <td>{{ userid }}</td>
+                    <td>{{ username }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Container for the most liked posts table -->
+<div class="container sign-in-box mt-3">
+    <h1>Most Liked Posts</h1>
+    <div style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <!-- Table headers for most liked posts -->
+                    <th scope="col">Post ID</th>
+                    <th scope="col">Post Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">No. of Likes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through the most_liked_posts variable to display liked post statistics -->
+                {% for post_id, post_title, username, like_count in most_liked_posts %}
+                <tr>
+                    <td>{{ post_id }}</td>
+                    <td>{{ post_title }}</td>
+                    <td>{{ username }}</td>
+                    <td>{{ like_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Container for the posts count distribution image -->
+<div class="container sign-in-box mt-3">
+    <img src="{{ url_for('static', filename='photos/statistical_photos/posts_count_distribution.png') }}" class="img-fluid" alt="Posts Count Distribution">
+</div>
+
+<!-- Container for the gender distribution image -->
+<div class="container sign-in-box mt-3 mb-3">
+    <img src="{{ url_for('static', filename='photos/statistical_photos/gender_distribution.png') }}" class="img-fluid" alt="Gender Distribution">
+</div>
+
+{% endblock %}
