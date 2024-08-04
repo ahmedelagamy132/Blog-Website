@@ -62,5 +62,4 @@ The development process followed an iterative approach with the following stages
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone <https://github.com/ahmedelagamy132/Blog-Website.git>
