@@ -56,7 +56,31 @@ def create_comment(post_id):
         db.session.add(comment)
         db.session.commit()
         flash("Done :)", category='success')
-    return redirect(url_for("routes.home"))
+    referrer = request.referrer
+    if referrer and 'profile' in referrer:
+        return redirect(url_for("userstemplate.profile"))
+    else:
+        return redirect(url_for("routes.home"))
+    
+@posts.route("/delete-comment/<comment_id>")
+def comment_delete(comment_id):
+    """
+    Endpoint to delete a specific comment.
+    Deletes the comment from the database if it exists. Redirects to the home page if the referrer URL contains 'profile',
+    otherwise redirects to the home page.
+    """
+    target_comment = Comment.query.filter_by(comment_id=comment_id).first()
+    if not target_comment:
+        flash("Comment does not exist.", category='error')
+    else:
+        db.session.delete(target_comment)
+        db.session.commit()
+        flash("Deleted successfully", category='success')
+    referrer = request.referrer
+    if referrer and 'profile' in referrer:
+        return redirect(url_for("userstemplate.profile"))
+    else:
+        return redirect(url_for("routes.home"))
 
 @posts.route("/delete-post/<post_id>")
 def delete(post_id):
@@ -74,9 +98,11 @@ def delete(post_id):
         flash("Deleted successfully", category='success')
     referrer = request.referrer
     if referrer and 'profile' in referrer:
-        return redirect(url_for("user.profile"))  # Replace "profile" with your actual profile route function name
+        return redirect(url_for("userstemplate.profile"))
     else:
         return redirect(url_for("routes.home"))
+    
+
 
 @posts.route("/edit-post/<post_id>", methods=["POST"])
 def edit(post_id):
@@ -91,7 +117,11 @@ def edit(post_id):
         target_post.content = request.form["content"]
         db.session.commit()
         flash("Edited successfully", category='success')
-    return redirect(url_for("routes.home"))
+        referrer = request.referrer
+    if referrer and 'profile' in referrer:
+        return redirect(url_for("userstemplate.profile"))
+    else:
+        return redirect(url_for("routes.home"))
 
 @posts.route("/like-post/<post_id>")
 def like_post(post_id):
@@ -108,4 +138,8 @@ def like_post(post_id):
         like = Like(author=current_user.id, post_id=post_id)
         db.session.add(like)
         db.session.commit()
-    return redirect(url_for("routes.home"))
+    referrer = request.referrer
+    if referrer and 'profile' in referrer:
+        return redirect(url_for("userstemplate.profile"))
+    else:
+        return redirect(url_for("routes.home"))

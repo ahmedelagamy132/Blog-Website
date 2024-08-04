@@ -24,8 +24,8 @@ def create_app():
     
     # Application configuration settings
     app.config['SECRET_KEY'] = 'Ae13200456753159Ae*'  # Secret key for session management
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Ae13200456*@localhost/Blogdb'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Ae13200456*@db/Blogdb'  # Database URI for SQLAlchemy
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Ae13200456*@localhost/Blogdb'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Ae13200456*@db/Blogdb'  # Database URI for SQLAlchemy
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking for performance
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Maximum file size for uploads (16 MB)
     ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])  # Allowed image file extensions

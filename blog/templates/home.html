@@ -5,6 +5,8 @@
 <div class="container">
   <h1 align="center">Posts</h1>
   <!-- Loop through all posts -->
+  {% if posts %}
+
   {% for post in posts %}
   <!-- Card to display each post -->
   <div class="card mb-4">
@@ -77,7 +79,7 @@
           <div class="p-2">
             <!-- Delete button for the comment (visible only to the comment owner) -->
             {% if comment.user_id == name.id %}
-            <button type="button" class="btn btn-outline-danger btn-sm float-right ml-2">Delete</button>
+            <a href="/delete-comment/{{comment.comment_id}}" class="btn btn-outline-danger btn-sm float-right ml-2">Delete</a>
             {% endif %}
             <!-- Comment content and metadata -->
             {{ comment.content }} <span class="inline float-right">by {{ post.user.username }} at {{ comment.date_created }}</span>
@@ -96,5 +98,8 @@
     </div>
   </div>
   {% endfor %}
+  {% else %}
+  <p align="center">No posts to show</p>
+  {% endif %}
 </div>
 {% endblock %}

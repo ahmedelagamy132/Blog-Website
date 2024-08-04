@@ -57,7 +57,8 @@
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4" name="email" placeholder="example@example.com">
+                    <input type="email" class="form-control" id="inputEmail4" name="email"
+                      placeholder="example@example.com">
                   </div>
                   <div class="form-group col-md-6">
                     <label for="inputUsername">Username</label>
@@ -71,7 +72,8 @@
                   </div>
                   <div class="form-group col-md-6">
                     <label for="inputPasswordConfirm">Re-Enter Password</label>
-                    <input type="password" class="form-control" id="inputPasswordConfirm" name="pass2" placeholder="*******">
+                    <input type="password" class="form-control" id="inputPasswordConfirm" name="pass2"
+                      placeholder="*******">
                   </div>
                 </div>
                 <div class="form-row">
@@ -82,7 +84,7 @@
                   <div class="form-group col-md-6">
                     <label for="inputGender">Gender</label>
                     <select id="inputGender" class="form-control" name="gender">
-                      <option selected>Gender...</option>
+                      <option selected>other</option>
                       <option>Male</option>
                       <option>Female</option>
                     </select>
@@ -122,10 +124,12 @@
       {% if post.user_id == user.id %}
       <!-- Buttons for editing and deleting posts -->
       <a href="/delete-post/{{post.post_id}}" class="btn btn-danger float-right">DELETE POST</a>
-      <a href="#" class="btn btn-warning float-right mr-2" data-toggle="modal" data-target="#editPostModal{{post.post_id}}">EDIT</a>
+      <a href="#" class="btn btn-warning float-right mr-2" data-toggle="modal"
+        data-target="#editPostModal{{post.post_id}}">EDIT</a>
 
       <!-- Modal for editing posts -->
-      <div class="modal fade" id="editPostModal{{post.post_id}}" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+      <div class="modal fade" id="editPostModal{{post.post_id}}" tabindex="-1" aria-labelledby="editPostModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -155,36 +159,38 @@
         {{post.content}}
       </p>
       <p>
-        <!-- Form for adding comments -->
-        <form method="POST" action="/create-comment/{{post.post_id}}">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Comment on Post" name="comment">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Comment</button>
-            </div>
-          </div>
-        </form>
-        <!-- Button to toggle comments -->
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#comments{{post.post_id}}"
-          aria-expanded="false" aria-controls="comments{{post.post_id}}">
-          Show Comments
-        </button>
-      </p>
-      <div class="collapse" id="comments{{post.post_id}}">
-        {% for comment in comments %}
-        {% if comment.post_id == post.post_id %}
-        <div class="card mb-2">
-          <div class="p-2">
-            {% if comment.user_id == user.id %}
-            <!-- Button for deleting comments -->
-            <button type="button" class="btn btn-outline-danger btn-sm float-right ml-2">Delete</button>
-            {% endif %}
-            {{ comment.content }} <span class="inline float-right">by {{ post.user.username }} at {{ comment.date_created }}</span>
+        <!-- Form to add a comment on the post -->
+      <form method="POST" action="/create-comment/{{ post.post_id }}">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Comment on Post" name="comment">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Comment</button>
           </div>
         </div>
-        {% endif %}
-        {% endfor %}
-      </div>
+      </form>
+      <!-- Button to toggle the visibility of comments -->
+<!-- Button to toggle collapse -->
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#c{{ post.post_id }}" aria-expanded="false" aria-controls="c{{ post.post_id }}">
+  Toggle Comments
+</button>
+
+<!-- Collapsible content -->
+<div class="collapse" id="c{{ post.post_id }}">
+  {% for comment in comments %}
+  <!-- Display comments for the current post -->
+  {% if comment.post_id == post.post_id %}
+  <div class="card mb-2">
+    <div class="p-2">
+      <!-- Delete button for the comment (visible only to the comment owner) -->
+      <a href="/delete-comment/{{comment.comment_id}}" class="btn btn-outline-danger btn-sm float-right ml-2">Delete</a>
+      <!-- Comment content and metadata -->
+      {{ comment.content }} <span class="inline float-right">by {{ post.user.username }} at {{ comment.date_created }}</span>
+    </div>
+  </div>
+  {% endif %}
+  {% endfor %}
+</div>
+
     </div>
     <div class="card-footer text-muted">
       Posted on {{ post.date_created }}, by <a href="/{{ post.user.username }}">{{ post.user.username }}</a>
@@ -193,4 +199,4 @@
     </div>
   </div>
   {% endfor %}
-{% endblock %}
+  {% endblock %}

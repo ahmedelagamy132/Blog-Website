@@ -16,7 +16,7 @@ from sqlalchemy.sql import func
 # Define the 'apis' Blueprint for API routes
 apis = Blueprint("apis", __name__)
 
-@apis.route('/avg-age', methods=['GET'])
+@apis.route('/avg-age', methods=['POST'])
 def avg_age():
     """
     API endpoint to calculate the average age of users.
@@ -28,7 +28,7 @@ def avg_age():
 # Load the summarization pipeline from Transformers
 summarizer = pipeline("summarization")
 
-@apis.route('/summarize', methods=['GET'])
+@apis.route('/summarize', methods=['POST'])
 def summarize_text():
     """
     API endpoint to summarize the content of all posts.
@@ -39,7 +39,7 @@ def summarize_text():
     all_posts = db.session.query(Post.title, Post.content).all()
 
     for title, post in all_posts:
-        summary = summarizer(post, max_length=150, min_length=30, do_sample=False)[0]['summary_text']
+        summary = summarizer(post, max_length=100, min_length=30, do_sample=False)[0]['summary_text']
         posts[title] = summary
 
     return jsonify(posts)
@@ -53,7 +53,7 @@ from collections import Counter
 nltk.download('punkt')
 nltk.download('stopwords')
 
-@apis.route('/extract_keywords', methods=['GET'])
+@apis.route('/extract_keywords', methods=['POST'])
 def extract_keywords():
     """
     API endpoint to extract keywords from the content of all posts.

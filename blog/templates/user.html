@@ -1,77 +1,73 @@
 {% extends "base.html" %}
-{% block title %}{{user}}{% endblock %}
+{% block title %}{{user.username}}{% endblock %}
 {% block content %}
-<!-- {{user}}
-{% for post in posts%}
-{{post.content}}
-{% endfor %} -->
+<!-- 
+  This template extends the base.html template and populates the content block with user profile information and posts.
+-->
+
 <style>
-.small-img {
+  /* Styling for profile image to maintain consistent size */
+  .small-img {
     width: 200px;
-    /* Adjust the width as needed */
     height: 200px;
-    /* Maintain aspect ratio */
   }
 </style>
 
 <div class="container-fluid">
-    <h1 align="center">{{user.username}}</h1>
-    <div class="container-fluid mt-2">
-        <div class="card">
-          <div class="card-header">
-            Profile
+  <!-- Display the username as a heading -->
+  <h1 align="center">{{user.username}}</h1>
+  <div class="container-fluid mt-2">
+    <div class="card">
+      <div class="card-header">
+        Profile
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm">
+            <!-- Display user information -->
+            <b>Username: </b> {{ user.username }} <br />
+            <b>Email: </b> {{ user.email }} <br />
+            <b>Age: </b> {{ user.age }} <br />
+            <b>Gender: </b> {{ user.gender }} <br />
+            <b>Member Since: </b> {{ user.date_added }} <br />
           </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm">
-                <b>Username: </b> {{ user.username }} <br />
-                <b>Email: </b> {{ user.email }} <br />
-                <b>Age: </b> {{ user.age }} <br />
-                <b>Gender: </b> {{ user.gender }} <br />
-                <b>Member Since: </b> {{ user.date_added }} <br />
-              </div>
-              <div class="col-sm">
-                {% if img %}
-                <img src="{{ url_for('static', filename='photos/profile_pictures/' +img.filename) }}"
-                class="img-thumbnail rounded float-right small-img ">
-      
-                {% else %}
-                <p>No profile picture available</p>
-                {% endif %}
-
-            </div>
-            </div>
+          <div class="col-sm">
+            <!-- Conditionally display profile picture if available -->
+            {% if img %}
+            <img src="{{ url_for('static', filename='photos/profile_pictures/' +img.filename) }}"
+              class="img-thumbnail rounded float-right small-img ">
+            {% else %}
+            <p>No profile picture available</p>
+            {% endif %}
           </div>
         </div>
       </div>
-    <!-- {% for post in posts %} -->
-    <!-- <div class="card border-dark">
+    </div>
+  </div>
+  <hr>
+  <!-- Display user's posts -->
+  <h2 align="center" class="m-3">posts</h2>
+  {% if posts%}
+  {% for post in posts %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <!-- Post title -->
+      {{post.title}}
+      <!-- Placeholder for delete button -->
+      <a href="#" class="btn btn-danger" style="float: right;">DELETE POST</a>
+    </div>
     <div class="card-body">
-        {{ post.content }}
-        {{ post.user.username }}
+      <h5 class="card-title">Card Title</h5>
+      <!-- Post content -->
+      <p class="card-text">{{post.content}}</p>
     </div>
-</div>
-<br> -->
-    <!-- {% endfor %} -->
-     <hr>
-    <h2 align="center" class="m-3">posts</h2>
-    {% for post in posts %}
-
-    <div class="card mb-4">
-        <div class="card-header">
-            {{post.title}}
-            <a href="#" class="btn btn-danger" style="float: right;">DELETE POST</a>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Card Title</h5>
-
-            <p class="card-text">{{post.content}}</p>
-            <!-- <a href="#" class="btn btn-primary">Read More</a> -->
-        </div>
-        <div class="card-footer text-muted">
-            Posted on {{post.date_created}}, by <a href="/{{post.user.username}}">{{post.user.username}}</a>
-        </div>
+    <div class="card-footer text-muted">
+      <!-- Post date and author -->
+      Posted on {{post.date_created}}, by <a href="/{{post.user.username}}">{{post.user.username}}</a>
     </div>
-
-    {% endfor %}
-{% endblock %}
+  </div>
+  {% endfor %}
+  {% else %}
+  <p align="center">No posts to show</p>
+  {% endif %}
+  {% endblock %}
